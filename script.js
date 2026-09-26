@@ -48,4 +48,20 @@ class HashMap {
             this.size++
         }
     }
+
+    get(key) {
+        const index = this.hash(key)
+        if (index < 0 || index >= this.buckets.length) {
+            throw new Error("Trying to access index out of bounds")
+        }
+        let current = this.buckets[index]
+        while (current !== null) {
+            if (current.key === key) {
+                return current.value
+            } else {
+                current = current.nextNode
+            }
+        }
+        return undefined
+    }
 }
