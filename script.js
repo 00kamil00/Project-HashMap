@@ -133,4 +133,18 @@ class HashMap {
         }
         return keysArray
     }
+
+    values() {
+        let valuesArray = []
+        for (const bucket of this.buckets) {
+            if (bucket !== null) {
+                let current = bucket
+                while (current !== null) {
+                    valuesArray.push(current.value)
+                    current = current.nextNode
+                }
+            }
+        }
+        return valuesArray
+    }
 }
