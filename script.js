@@ -114,4 +114,9 @@ class HashMap {
     length() {
         return this.size
     }
+
+    clear() {
+        this.size = 0
+        this.buckets = new Array(this.capacity).fill(null)
+    }
 }
