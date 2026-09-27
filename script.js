@@ -119,4 +119,18 @@ class HashMap {
         this.size = 0
         this.buckets = new Array(this.capacity).fill(null)
     }
+
+    keys() {
+        let keysArray = []
+        for (const bucket of this.buckets) {
+            if (bucket !== null) {
+                let current = bucket
+                while (current !== null) {
+                    keysArray.push(current.key)
+                    current = current.nextNode
+                }
+            }
+        }
+        return keysArray
+    }
 }
