@@ -147,4 +147,18 @@ class HashMap {
         }
         return valuesArray
     }
+
+    entries() {
+        let entriesArray = []
+        for (const bucket of this.buckets) {
+            if (bucket !== null) {
+                let current = bucket
+                while (current !== null) {
+                    entriesArray.push([current.key, current.value])
+                    current = current.nextNode
+                }
+            }
+        }
+        return entriesArray
+    }
 }
