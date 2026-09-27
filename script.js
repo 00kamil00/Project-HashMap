@@ -30,23 +30,20 @@ class HashMap {
         if (index < 0 || index >= this.buckets.length) {
             throw new Error("Trying to access index out of bounds")
         }
-        if (this.buckets[index] === null) {
-            this.buckets[index] = new Node(key, value)
-            this.size++
-            return
-        } else {
-            let current = this.buckets[index]
-            while (current !== null) {
-                if (current.key === key) {
-                    current.value = value
-                    return
-                } else {
-                    current = current.nextNode
-                }
+        let current = this.buckets[index]
+        while (current !== null) {
+            if (current.key === key) {
+                current.value = value
+                return
+            } else {
+                current = current.nextNode
             }
+        }
             this.buckets[index] = new Node(key, value, this.buckets[index])
             this.size++
-        }
+            if (this.size > this.capacity * this.loadFactor) {
+                this.resize()
+            }
     }
 
     get(key) {
@@ -160,5 +157,15 @@ class HashMap {
             }
         }
         return entriesArray
+    }
+
+    resize() {
+        const oldEntries = this.entries()
+        this.capacity *= 2
+        this.buckets = new Array(this.capacity).fill(null)
+        this.size = 0
+        oldEntries.forEach((entry) => {
+            this.set(entry[0], entry[1])
+        })
     }
 }
