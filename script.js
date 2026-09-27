@@ -68,7 +68,7 @@ class HashMap {
     has(key) {
         const index = this.hash(key)
         if (index < 0 || index >= this.buckets.length) {
-            throw new Error("trying to access index out of bounds")
+            throw new Error("Trying to access index out of bounds")
         }
         let current = this.buckets[index]
         while (current !== null) {
@@ -76,6 +76,36 @@ class HashMap {
                 return true
             } else {
                 current = current.nextNode
+            }
+        }
+        return false
+    }
+
+    remove(key) {
+        const index = this.hash(key)
+        if (index < 0 || index >= this.buckets.length) {
+            throw new Error("Trying to access index out of bounds")
+        }
+        let current = this.buckets[index]
+        if (current === null) {
+            return false
+        }
+        if (current !== null && current.key === key) {
+            this.buckets[index] = current.nextNode
+            this.size--
+            return true
+        } else {
+            let prev = current
+            current = current.nextNode
+            while (current !== null) {
+                if (current.key === key) {
+                    prev.nextNode = current.nextNode
+                    this.size--
+                    return true
+                } else {
+                    prev = prev.nextNode
+                    current = current.nextNode
+                }
             }
         }
         return false
