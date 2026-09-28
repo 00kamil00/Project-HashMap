@@ -1,13 +1,12 @@
 class Node {
-    constructor(key, value, nextNode = null) {
+    constructor(key, nextNode = null) {
         this.key = key
-        this.value = value
         this.nextNode = nextNode
     }
 }
 
 
-class HashMap {
+class HashSet {
     constructor() {
         this.loadFactor = 0.75
         this.capacity = 16
@@ -25,7 +24,7 @@ class HashMap {
         return hashCode
     }
 
-    set(key, value) {
+    set(key) {
         const index = this.hash(key)
         if (index < 0 || index >= this.buckets.length) {
             throw new Error("Trying to access index out of bounds")
@@ -33,33 +32,16 @@ class HashMap {
         let current = this.buckets[index]
         while (current !== null) {
             if (current.key === key) {
-                current.value = value
                 return
             } else {
                 current = current.nextNode
             }
-        }
-        this.buckets[index] = new Node(key, value, this.buckets[index])
+        }    
+        this.buckets[index] = new Node(key, this.buckets[index])
         this.size++
         if (this.size > this.capacity * this.loadFactor) {
             this.resize()
         }
-    }
-
-    get(key) {
-        const index = this.hash(key)
-        if (index < 0 || index >= this.buckets.length) {
-            throw new Error("Trying to access index out of bounds")
-        }
-        let current = this.buckets[index]
-        while (current !== null) {
-            if (current.key === key) {
-                return current.value
-            } else {
-                current = current.nextNode
-            }
-        }
-        return undefined
     }
 
     has(key) {
@@ -131,41 +113,13 @@ class HashMap {
         return keysArray
     }
 
-    values() {
-        let valuesArray = []
-        for (const bucket of this.buckets) {
-            if (bucket !== null) {
-                let current = bucket
-                while (current !== null) {
-                    valuesArray.push(current.value)
-                    current = current.nextNode
-                }
-            }
-        }
-        return valuesArray
-    }
-
-    entries() {
-        let entriesArray = []
-        for (const bucket of this.buckets) {
-            if (bucket !== null) {
-                let current = bucket
-                while (current !== null) {
-                    entriesArray.push([current.key, current.value])
-                    current = current.nextNode
-                }
-            }
-        }
-        return entriesArray
-    }
-
     resize() {
-        const oldEntries = this.entries()
+        const oldKeys = this.keys()
         this.capacity *= 2
         this.buckets = new Array(this.capacity).fill(null)
         this.size = 0
-        oldEntries.forEach((entry) => {
-            this.set(entry[0], entry[1])
+        oldKeys.forEach((key) => {
+            this.set(key)
         })
     }
 }
